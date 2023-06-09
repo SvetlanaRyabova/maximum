@@ -13,10 +13,6 @@ def pytest_addoption(parser):
                      default=HOST,
                      action='store',
                      help='host fo testing')
-    parser.addoption('--browser',
-                     default='chrome',
-                     action='store',
-                     help='browser for UI tests')
     parser.addoption('--headless',
                      default=False,
                      action='store',
