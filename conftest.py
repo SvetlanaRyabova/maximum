@@ -46,22 +46,25 @@ def cmd_browser(request):
 
 @pytest.fixture(scope='session')
 def browser(cmd_browser, request):
-    headless = request.config.getoption('--headless')
     if cmd_browser == 'chrome':
         options = webdriver.ChromeOptions()
-        options.headless = headless
+        if request.config.getoption('--headless'):
+            options.add_argument("--headless=new")
         try:
             driver = webdriver.Chrome(options=options)
         except Exception:
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     else:
         options = webdriver.FirefoxOptions()
-        options.headless = headless
+        if request.config.getoption('--headless'):
+            options.add_argument("--headless=new")
         try:
             driver = webdriver.Firefox()
         except Exception:
             driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
+    driver.maximize_window()
     driver.implicitly_wait(5)
     yield driver
     driver.quit()
+
 
